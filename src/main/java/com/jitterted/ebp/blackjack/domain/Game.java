@@ -1,13 +1,5 @@
 package com.jitterted.ebp.blackjack.domain;
 
-import com.jitterted.ebp.blackjack.adapter.in.console.ConsoleHand;
-import org.fusesource.jansi.Ansi;
-import org.fusesource.jansi.AnsiConsole;
-
-import java.util.Scanner;
-
-import static org.fusesource.jansi.Ansi.ansi;
-
 public class Game {
 
     private final Deck deck;
@@ -16,29 +8,6 @@ public class Game {
     private final Hand playerHand = new Hand();
 
     private boolean playerDone;
-
-    public static void resetScreen() {
-        System.out.println(ansi().reset());
-    }
-
-    public static void waitForEnterFromUser() {
-        System.out.println(ansi()
-                                   .cursor(3, 1)
-                                   .fgBrightBlack().a("Hit [ENTER] to start..."));
-
-        System.console().readLine();
-    }
-
-    public static void displayWelcomeScreen() {
-        AnsiConsole.systemInstall();
-        System.out.println(ansi()
-                                   .bgBright(Ansi.Color.WHITE)
-                                   .eraseScreen()
-                                   .cursor(1, 1)
-                                   .fgGreen().a("Welcome to")
-                                   .fgRed().a(" JitterTed's")
-                                   .fgBlack().a(" BlackJack game"));
-    }
 
     public Game() {
         deck = new Deck();
@@ -78,50 +47,19 @@ public class Game {
         }
     }
 
-    public String inputFromPlayer() {
-        System.out.println("[H]it or [S]tand?");
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextLine();
+    // "Query" rule: snapshot (point-in-time) and immutable/unmodifiable
+    // 0. Hand - is mutable and not a snapshot
+    // 1. DTO - cards, first card, value -- implies belongs in adapter
+    // 2. clone() Hand - not the "real deal"
+    // 3. Interface/visibility - "live" view
+    // 4. Value Object - just provide cards, first card, value "HandView"
+    //    -> "memento"
+    public Hand playerHand() {
+        return playerHand;
     }
 
-    public void displayGameState() {
-        System.out.print(ansi().eraseScreen().cursor(1, 1));
-        System.out.println("Dealer has: ");
-        System.out.println(ConsoleHand.displayFirstCard(dealerHand)); // first card is Face Up
-
-        // second card is the hole card, which is hidden
-        displayBackOfCard();
-
-        System.out.println();
-        System.out.println("Player has: ");
-        System.out.println(ConsoleHand.cardsAsString(playerHand));
-        System.out.println(" (" + playerHand.value() + ")");
-    }
-
-    public void displayFinalGameState() {
-        System.out.print(ansi().eraseScreen().cursor(1, 1));
-        System.out.println("Dealer has: ");
-        System.out.println(ConsoleHand.cardsAsString(dealerHand));
-        System.out.println(" (" + dealerHand.value() + ")");
-
-        System.out.println();
-        System.out.println("Player has: ");
-        System.out.println(ConsoleHand.cardsAsString(playerHand));
-        System.out.println(" (" + playerHand.value() + ")");
-    }
-
-    private void displayBackOfCard() {
-        System.out.print(
-                ansi()
-                        .cursorUp(7)
-                        .cursorRight(12)
-                        .a("┌─────────┐").cursorDown(1).cursorLeft(11)
-                        .a("│░░░░░░░░░│").cursorDown(1).cursorLeft(11)
-                        .a("│░ J I T ░│").cursorDown(1).cursorLeft(11)
-                        .a("│░ T E R ░│").cursorDown(1).cursorLeft(11)
-                        .a("│░ T E D ░│").cursorDown(1).cursorLeft(11)
-                        .a("│░░░░░░░░░│").cursorDown(1).cursorLeft(11)
-                        .a("└─────────┘"));
+    public Hand dealerHand() {
+        return dealerHand;
     }
 
     public void playerHits() {
