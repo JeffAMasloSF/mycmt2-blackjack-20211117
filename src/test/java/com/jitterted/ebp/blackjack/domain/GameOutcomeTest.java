@@ -23,4 +23,20 @@ class GameOutcomeTest {
                 .isTrue();
     }
 
+    @Test
+    public void playerDealtBetterHandThanDealerAndStandsThenPlayerBeatsDealer() throws Exception {
+        Deck playerStandsAndBeatsDealer = new StubDeck(Rank.TEN, Rank.EIGHT,
+                                                       Rank.QUEEN, Rank.JACK);
+        Game game = new Game(playerStandsAndBeatsDealer);
+        game.initialDeal();
+
+        game.playerStands();
+        game.dealerTurn();
+
+        assertThat(game.determineOutcome())
+                .isEqualTo("You beat the Dealer! 💵");
+
+        assertThat(game.isPlayerDone())
+                .isTrue();
+    }
 }
