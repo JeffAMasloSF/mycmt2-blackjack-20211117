@@ -8,10 +8,7 @@ class GameOutcomeTest {
 
     @Test
     public void playerHitsAndGoesBustThenPlayerLoses() throws Exception {
-        Deck playerHitsAndGoesBustDeck = new StubDeck(Rank.TEN, Rank.EIGHT,
-                                                      Rank.QUEEN, Rank.JACK,
-                                                      Rank.THREE);
-        Game game = new Game(playerHitsAndGoesBustDeck);
+        Game game = new Game(StubDeck.playerHitsAndGoesBust());
         game.initialDeal();
 
         game.playerHits();
@@ -25,9 +22,7 @@ class GameOutcomeTest {
 
     @Test
     public void playerDealtBetterHandThanDealerAndStandsThenPlayerBeatsDealer() throws Exception {
-        Deck playerStandsAndBeatsDealer = new StubDeck(Rank.TEN, Rank.EIGHT,
-                                                       Rank.QUEEN, Rank.JACK);
-        Game game = new Game(playerStandsAndBeatsDealer);
+        Game game = new Game(StubDeck.playerStandsAndBeatsDealer());
         game.initialDeal();
 
         game.playerStands();
@@ -39,4 +34,5 @@ class GameOutcomeTest {
         assertThat(game.isPlayerDone())
                 .isTrue();
     }
+
 }
