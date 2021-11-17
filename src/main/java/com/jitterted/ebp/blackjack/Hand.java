@@ -13,7 +13,7 @@ public class Hand {
     public Hand() {
     }
 
-    private int value() {
+    public int value() {
         int handValue = cards
                 .stream()
                 .mapToInt(Card::rankValue)
@@ -40,10 +40,6 @@ public class Hand {
         return value() <= 16;
     }
 
-    void display() {
-        System.out.println(ConsoleHand.cardsAsString(this));
-    }
-
     // Query: *Snapshot* of point-in-time information, shouldn't allow clients to modify state of object
     public List<Card> cards() {
         return List.copyOf(cards);
@@ -63,10 +59,6 @@ public class Hand {
 
     boolean beats(Hand hand) {
         return hand.value() < value();
-    }
-
-    String displayValue() {
-        return String.valueOf(value());
     }
 
     public boolean valueEquals(int target) {
