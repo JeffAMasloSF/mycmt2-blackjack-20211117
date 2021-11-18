@@ -79,6 +79,7 @@ public class Game {
     public void playerHits() {
         playerHand.drawFrom(deck);
         playerDone = playerHand.isBusted();
+        gameMonitor.roundCompleted(this);
     }
 
     public void playerStands() {
