@@ -26,6 +26,7 @@ public class Game {
         dealRoundOfCards();
         if (playerHand.hasBlackjack()) {
             playerDone = true;
+            gameMonitor.roundCompleted(this);
         }
     }
 
