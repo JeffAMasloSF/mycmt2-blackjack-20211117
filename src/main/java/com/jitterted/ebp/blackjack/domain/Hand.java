@@ -63,6 +63,6 @@ public class Hand {
 
     public boolean hasBlackjack() {
         return value() == 21 &&
-                cards().size() == 2;
+                cards.size() == 2;
     }
 }
